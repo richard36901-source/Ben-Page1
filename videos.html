@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>✏️ כותרת דף הסרטונים</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+
+  <!-- Vimeo Player SDK -->
+  <script src="https://player.vimeo.com/api/player.js"></script>
+
+  <!-- ============================================================
+       GOOGLE TAG MANAGER — replace GTM-XXXXXXX with your real ID
+       (We will do this together in Step 6)
+  ============================================================ -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0a0a0f;
+      --surface: #13131a;
+      --border:  #2a2a3a;
+      --accent:  #e8c86e;
+      --accent2: #c9a84c;
+      --text:    #f0ede6;
+      --muted:   #8a8799;
+      --radius:  14px;
+    }
+
+    html, body {
+      font-family: 'Heebo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      direction: rtl;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 20px 100px;
+    }
+
+    .top-bar {
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 99px;
+      margin-bottom: 48px;
+    }
+
+    /* ── progress bar ── */
+    .progress-wrap {
+      width: 100%;
+      max-width: 640px;
+      margin-bottom: 40px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 5px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 99px;
+      transition: width 0.6s ease;
+      width: 33.33%;
+    }
+
+    /* ── step dots ── */
+    .steps-dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 48px;
+    }
+
+    .dot {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      transition: all 0.4s ease;
+    }
+
+    .dot.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 16px rgba(232,200,110,0.3);
+    }
+
+    .dot.done {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0a0a0f;
+    }
+
+    /* ── video section ── */
+    .video-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 700px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .video-section.active { display: flex; }
+
+    .video-section .step-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .video-section h2 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .video-section .video-sub {
+      font-size: 0.95rem;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 28px;
+      line-height: 1.7;
+    }
+
+    /* ── video frame ── */
+    .video-frame {
+      width: 100%;
+      position: relative;
+      padding-top: 56.25%; /* 16:9 */
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #0d0d14;
+      margin-bottom: 28px;
+    }
+
+    .video-frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* placeholder shown before video ID is added */
+    .video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .video-placeholder .play-icon {
+      font-size: 3rem;
+      opacity: 0.3;
+    }
+
+    /* ── continue button ── */
+    .continue-btn {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+      padding: 16px 24px;
+      background: var(--accent);
+      color: #0a0a0f;
+      font-family: 'Heebo', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      text-align: center;
+      animation: pulse 2s infinite;
+    }
+
+    .continue-btn.visible { display: block; }
+
+    .continue-btn:hover {
+      background: var(--accent2);
+      box-shadow: 0 8px 30px rgba(232,200,110,0.3);
+      transform: translateY(-2px);
+      animation: none;
+    }
+
+    /* ── final CTA (after video 3) ── */
+    .final-cta {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      max-width: 500px;
+      padding: 48px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 0 80px rgba(232,200,110,0.08);
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .final-cta.visible { display: flex; }
+
+    .final-cta h3 {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--accent);
+    }
+
+    .final-cta p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    /* ── animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(232,200,110,0.4); }
+      50%       { box-shadow: 0 0 0 12px rgba(232,200,110,0); }
+    }
+
+    @media (max-width: 520px) {
+      .video-section h2 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<div class="page-wrapper">
+  <div class="top-bar"></div>
+
+  <!-- ── PROGRESS ── -->
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="progressText">סרטון 1 מתוך 3</span>
+      <span id="progressPct">33%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- ── STEP DOTS ── -->
+  <div class="steps-dots">
+    <div class="dot active" id="dot1">1</div>
+    <div class="dot" id="dot2">2</div>
+    <div class="dot" id="dot3">3</div>
+  </div>
+
+  <!-- ══════════════════════════════
+       VIDEO 1
+  ══════════════════════════════ -->
+  <div class="video-section active" id="section1">
+    <p class="step-label">שלב 1 מתוך 3</p>
+    <h2>✏️ כותרת לסרטון הראשון</h2>
+    <p class="video-sub">✏️ טקסט קצר שמסביר על מה הסרטון הזה</p>
+
+    <div class="video-frame">
+      <!--
+        ✏️ HOW TO ADD YOUR VIMEO VIDEO:
+        1. Replace VIMEO_ID_1 with your actual Vimeo video ID
+           Example: if your link is https://vimeo.com/123456789
+           then VIMEO_ID_1 = 123456789
+        2. Delete the placeholder div below when you add the iframe
+      -->
+      <!-- <iframe id="vimeoPlayer1"
+        src="https://player.vimeo.com/video/VIMEO_ID_1?api=1&player_id=vimeoPlayer1&title=0&byline=0&portrait=0"
+        allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>
+      </iframe> -->
+      <div class="video-placeholder">
+        <span class="play-icon">▶</span>
+        <span>הכנס כאן את ה-ID של סרטון 1 מ-Vimeo</span>
+      </div>
+    </div>
+
+    <button class="continue-btn visible" id="continueBtn1" onclick="goToStep(2)">
+      המשך לסרטון הבא ←
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════
+       VIDEO 2
+  ══════════════════════════════ -->
+  <div class="video-section" id="section2">
+    <p class="step-label">שלב 2 מתוך 3</p>
+    <h2>✏️ כותרת לסרטון השני</h2>
+    <p class="video-sub">✏️ טקסט קצר שמסביר על מה הסרטון הזה</p>
+
+    <div class="video-frame">
+      <!--
+        ✏️ Replace VIMEO_ID_2 with your actual video ID
+      -->
+      <!-- <iframe id="vimeoPlayer2"
+        src="https://player.vimeo.com/video/VIMEO_ID_2?api=1&player_id=vimeoPlayer2&title=0&byline=0&portrait=0"
+        allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>
+      </iframe> -->
+      <div class="video-placeholder">
+        <span class="play-icon">▶</span>
+        <span>הכנס כאן את ה-ID של סרטון 2 מ-Vimeo</span>
+      </div>
+    </div>
+
+    <button class="continue-btn visible" id="continueBtn2" onclick="goToStep(3)">
+      המשך לסרטון האחרון ←
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════
+       VIDEO 3
+  ══════════════════════════════ -->
+  <div class="video-section" id="section3">
+    <p class="step-label">שלב 3 מתוך 3</p>
+    <h2>✏️ כותרת לסרטון השלישי</h2>
+    <p class="video-sub">✏️ טקסט קצר שמסביר על מה הסרטון הזה</p>
+
+    <div class="video-frame">
+      <!--
+        ✏️ Replace VIMEO_ID_3 with your actual video ID
+      -->
+      <!-- <iframe id="vimeoPlayer3"
+        src="https://player.vimeo.com/video/VIMEO_ID_3?api=1&player_id=vimeoPlayer3&title=0&byline=0&portrait=0"
+        allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>
+      </iframe> -->
+      <div class="video-placeholder">
+        <span class="play-icon">▶</span>
+        <span>הכנס כאן את ה-ID של סרטון 3 מ-Vimeo</span>
+      </div>
+    </div>
+
+    <button class="continue-btn visible" id="continueBtn3" onclick="showFinalCTA()">
+      סיימתי לצפות ✓
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════
+       FINAL CTA (after all 3 videos)
+  ══════════════════════════════ -->
+  <div class="final-cta" id="finalCta">
+    <span style="font-size:2.5rem">🎉</span>
+    <h3>✏️ כותרת סיום כאן</h3>
+    <p>✏️ טקסט סיום — לדוגמה: "עכשיו אתה מוכן. ניצור איתך קשר בקרוב."</p>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+//  STATE
+// ============================================================
+window.dataLayer = window.dataLayer || [];
+let currentStep = 1;
+let videoTracking = { 1: {}, 2: {}, 3: {} };
+
+// Track: page view
+dataLayer.push({ event: 'video_page_view', page: 'videos' });
+
+// Track: user leaving mid-page
+window.addEventListener('beforeunload', () => {
+  dataLayer.push({
+    event:       'video_page_exit',
+    page:        'videos',
+    exitedOnStep: currentStep
+  });
+});
+
+
+// ============================================================
+//  STEP NAVIGATION
+// ============================================================
+function goToStep(step) {
+  // hide current
+  document.getElementById('section' + currentStep).classList.remove('active');
+  document.getElementById('dot' + currentStep).classList.remove('active');
+  document.getElementById('dot' + currentStep).classList.add('done');
+  document.getElementById('dot' + currentStep).textContent = '✓';
+
+  // track: step advanced
+  dataLayer.push({
+    event:     'video_step_advanced',
+    fromStep:  currentStep,
+    toStep:    step,
+    page:      'videos'
+  });
+
+  currentStep = step;
+
+  // show new
+  document.getElementById('section' + step).classList.add('active');
+  document.getElementById('dot' + step).classList.add('active');
+
+  // update progress bar
+  const pct = Math.round((step / 3) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = 'סרטון ' + step + ' מתוך 3';
+  document.getElementById('progressPct').textContent  = pct + '%';
+
+  // scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // init Vimeo tracking for this step
+  initVimeoTracking(step);
+}
+
+function showFinalCTA() {
+  document.getElementById('section3').classList.remove('active');
+  document.getElementById('dot3').classList.remove('active');
+  document.getElementById('dot3').classList.add('done');
+  document.getElementById('dot3').textContent = '✓';
+
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressText').textContent = 'סיימת את כל הסרטונים!';
+  document.getElementById('progressPct').textContent  = '100%';
+
+  document.getElementById('finalCta').classList.add('visible');
+
+  dataLayer.push({ event: 'video_funnel_completed', page: 'videos' });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
+// ============================================================
+//  VIMEO TRACKING
+//  This fires automatically once you add the real video IDs.
+//  Tracks: play, pause, % watched (25/50/75/100), ended, seeked
+// ============================================================
+function initVimeoTracking(step) {
+  const iframe = document.getElementById('vimeoPlayer' + step);
+  if (!iframe) return; // placeholder — no video yet
+
+  const player = new Vimeo.Player(iframe);
+  const milestones = { 25: false, 50: false, 75: false, 100: false };
+
+  player.on('play', () => {
+    dataLayer.push({ event: 'video_play', step: step, page: 'videos' });
+  });
+
+  player.on('pause', async () => {
+    const seconds  = await player.getCurrentTime();
+    const duration = await player.getDuration();
+    const pct      = Math.round((seconds / duration) * 100);
+    dataLayer.push({ event: 'video_pause', step: step, watchedPct: pct, page: 'videos' });
+  });
+
+  player.on('ended', () => {
+    dataLayer.push({ event: 'video_ended', step: step, page: 'videos' });
+    // auto-show continue button when video ends
+    const btn = document.getElementById('continueBtn' + step);
+    if (btn) { btn.classList.add('visible'); btn.style.animation = 'pulse 2s infinite'; }
+  });
+
+  player.on('seeked', async (data) => {
+    dataLayer.push({ event: 'video_seeked', step: step, seekedTo: Math.round(data.seconds), page: 'videos' });
+  });
+
+  player.on('timeupdate', async (data) => {
+    const duration = await player.getDuration();
+    if (!duration) return;
+    const pct = (data.seconds / duration) * 100;
+
+    [25, 50, 75, 100].forEach(m => {
+      if (!milestones[m] && pct >= m) {
+        milestones[m] = true;
+        dataLayer.push({ event: 'video_progress', step: step, milestone: m + '%', page: 'videos' });
+      }
+    });
+  });
+}
+
+// init tracking for step 1 on load
+initVimeoTracking(1);
+</script>
+
+</body>
+</html>

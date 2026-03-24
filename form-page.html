@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>כותרת הדף</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+
+  <!-- ============================================================
+       GOOGLE TAG MANAGER — replace GTM-XXXXXXX with your real ID
+       (We will do this together in Step 6)
+  ============================================================ -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0a0f;
+      --surface:   #13131a;
+      --border:    #2a2a3a;
+      --accent:    #e8c86e;
+      --accent2:   #c9a84c;
+      --text:      #f0ede6;
+      --muted:     #8a8799;
+      --danger:    #e85a4f;
+      --radius:    14px;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Heebo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      direction: rtl;
+    }
+
+    /* ── background grain texture ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 20px 80px;
+    }
+
+    /* ── top accent line ── */
+    .top-bar {
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 99px;
+      margin-bottom: 48px;
+    }
+
+    /* ── hero section ── */
+    .hero {
+      max-width: 680px;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 56px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      /* ✏️ EDIT: תת-כותרת קטנה למעלה */
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 24px;
+      /* ✏️ EDIT: הכותרת הראשית */
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.8;
+      /* ✏️ EDIT: טקסט הגוף המרכזי */
+    }
+
+    /* ── bullets / benefits ── */
+    .benefits {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 520px;
+      width: 100%;
+      margin: 0 auto 56px;
+      animation: fadeUp 0.7s 0.15s ease both;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--text);
+    }
+
+    .benefit-item .icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    /* ── form card ── */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 40px;
+      max-width: 480px;
+      width: 100%;
+      animation: fadeUp 0.7s 0.3s ease both;
+      box-shadow: 0 0 80px rgba(232,200,110,0.06);
+    }
+
+    .form-card h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-align: center;
+      /* ✏️ EDIT: כותרת הטופס */
+    }
+
+    .form-card .sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 32px;
+      /* ✏️ EDIT: תת-כותרת הטופס */
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .field input {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      font-family: 'Heebo', sans-serif;
+      color: var(--text);
+      direction: rtl;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .field input::placeholder { color: #444455; }
+
+    .field input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(232,200,110,0.12);
+    }
+
+    .field input.error {
+      border-color: var(--danger);
+    }
+
+    .error-msg {
+      font-size: 0.78rem;
+      color: var(--danger);
+      display: none;
+    }
+
+    .field input.error + .error-msg { display: block; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--accent);
+      color: #0a0a0f;
+      font-family: 'Heebo', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      letter-spacing: 0.03em;
+    }
+
+    .submit-btn:hover {
+      background: var(--accent2);
+      box-shadow: 0 8px 30px rgba(232,200,110,0.25);
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:active { transform: translateY(0); }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── privacy note ── */
+    .privacy {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+
+    /* ── success state ── */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 32px 0 16px;
+    }
+
+    .success-msg .checkmark {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .success-msg h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .success-msg p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* ── animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── mobile ── */
+    @media (max-width: 520px) {
+      .form-card { padding: 32px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<div class="page-wrapper">
+  <div class="top-bar"></div>
+
+  <!-- ── HERO ── -->
+  <div class="hero">
+    <p class="eyebrow">✏️ תת-כותרת קטנה כאן</p>
+    <h1>הכותרת <span>הראשית</span> שלך כאן</h1>
+    <p>זהו טקסט הגוף שלך. כאן תכתוב את הבטחת הערך שלך — מה הלקוח מקבל ולמה זה חשוב לו. ניתן לערוך את הטקסט הזה בקלות.</p>
+  </div>
+
+  <!-- ── BENEFITS ── -->
+  <!-- ✏️ EDIT: שנה את הנקודות האלו לטבות שלך -->
+  <div class="benefits">
+    <div class="benefit-item"><span class="icon">✅</span> יתרון ראשון — ערך שהלקוח מקבל</div>
+    <div class="benefit-item"><span class="icon">✅</span> יתרון שני — עוד סיבה להירשם</div>
+    <div class="benefit-item"><span class="icon">✅</span> יתרון שלישי — מה שמייחד אותך</div>
+  </div>
+
+  <!-- ── FORM CARD ── -->
+  <div class="form-card">
+    <h2>✏️ כותרת הטופס כאן</h2>
+    <p class="sub">✏️ תת-כותרת קטנה — לדוגמה: "מלא פרטים ונחזור אליך תוך 24 שעות"</p>
+
+    <div id="formWrapper">
+      <div class="field-group">
+        <div class="field">
+          <label for="fullName">שם מלא</label>
+          <input type="text" id="fullName" placeholder="ישראל ישראלי" autocomplete="name"/>
+          <span class="error-msg">אנא הכנס שם מלא</span>
+        </div>
+        <div class="field">
+          <label for="phone">טלפון</label>
+          <input type="tel" id="phone" placeholder="050-0000000" autocomplete="tel"/>
+          <span class="error-msg">אנא הכנס מספר טלפון תקין</span>
+        </div>
+        <div class="field">
+          <label for="email">אימייל</label>
+          <input type="email" id="email" placeholder="israel@example.com" autocomplete="email"/>
+          <span class="error-msg">אנא הכנס כתובת אימייל תקינה</span>
+        </div>
+      </div>
+
+      <button class="submit-btn" id="submitBtn" onclick="handleSubmit()">
+        ✏️ טקסט הכפתור כאן ←
+      </button>
+      <p class="privacy">🔒 הפרטים שלך בטוחים אצלנו. אנחנו לא שולחים ספאם.</p>
+    </div>
+
+    <!-- success message shown after submit -->
+    <div class="success-msg" id="successMsg">
+      <span class="checkmark">🎉</span>
+      <h3>תודה! קיבלנו את הפרטים שלך</h3>
+      <p>ניצור איתך קשר בהקדם.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  TRACKING — dataLayer events (Google Tag Manager)
+//  These fire automatically. You don't need to change anything here.
+// ============================================================
+window.dataLayer = window.dataLayer || [];
+
+// Track: page view (fires on load)
+dataLayer.push({ event: 'form_page_view', page: 'form' });
+
+// Track: user started filling the form (first interaction)
+let formStarted = false;
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('focus', () => {
+    if (!formStarted) {
+      formStarted = true;
+      dataLayer.push({ event: 'form_started', page: 'form' });
+    }
+  });
+
+  // Track: individual field filled
+  input.addEventListener('blur', () => {
+    if (input.value.trim()) {
+      dataLayer.push({ event: 'form_field_filled', field: input.id, page: 'form' });
+    }
+  });
+});
+
+// Track: user leaving without submitting
+window.addEventListener('beforeunload', () => {
+  if (formStarted && !window.formSubmitted) {
+    dataLayer.push({ event: 'form_abandoned', page: 'form' });
+  }
+});
+
+
+// ============================================================
+//  FORM VALIDATION & SUBMIT
+// ============================================================
+function validate() {
+  let valid = true;
+
+  const name  = document.getElementById('fullName');
+  const phone = document.getElementById('phone');
+  const email = document.getElementById('email');
+
+  // name
+  if (!name.value.trim()) {
+    name.classList.add('error'); valid = false;
+  } else { name.classList.remove('error'); }
+
+  // phone — simple Israeli mobile check
+  const phoneClean = phone.value.replace(/[\s\-]/g,'');
+  if (!/^0[0-9]{9}$/.test(phoneClean)) {
+    phone.classList.add('error'); valid = false;
+  } else { phone.classList.remove('error'); }
+
+  // email
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+    email.classList.add('error'); valid = false;
+  } else { email.classList.remove('error'); }
+
+  return valid;
+}
+
+async function handleSubmit() {
+  if (!validate()) {
+    dataLayer.push({ event: 'form_validation_failed', page: 'form' });
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'שולח...';
+
+  const payload = {
+    timestamp:  new Date().toLocaleString('he-IL'),
+    fullName:   document.getElementById('fullName').value.trim(),
+    phone:      document.getElementById('phone').value.trim(),
+    email:      document.getElementById('email').value.trim(),
+    source:     document.referrer || 'direct'
+  };
+
+  // ============================================================
+  //  GOOGLE SHEETS — replace the URL below with your Apps Script
+  //  Web App URL. We will do this together in Step 5.
+  // ============================================================
+  const SHEET_URL = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
+
+  try {
+    await fetch(SHEET_URL, {
+      method:  'POST',
+      mode:    'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    });
+
+    // Track: successful submission
+    window.formSubmitted = true;
+    dataLayer.push({
+      event:    'form_submitted',
+      page:     'form',
+      fullName: payload.fullName,
+      phone:    payload.phone,
+      email:    payload.email
+    });
+
+    // Show success message
+    document.getElementById('formWrapper').style.display = 'none';
+    document.getElementById('successMsg').style.display  = 'block';
+
+    // ✏️ EDIT: Replace this URL with your video page URL
+    setTimeout(() => {
+      window.location.href = 'videos.html';
+    }, 2500);
+
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'שגיאה — נסה שוב';
+    dataLayer.push({ event: 'form_error', page: 'form' });
+  }
+}
+</script>
+
+</body>
+</html>
